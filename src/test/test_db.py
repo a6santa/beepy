@@ -1,1 +1,0 @@
-from etl.db.GSpreadSheet import GSpreadSheet

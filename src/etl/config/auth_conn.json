@@ -1,0 +1,24 @@
+{
+    "google": {
+        "dbtype": "G_WORKSHEET",
+        "file_path": "G_FILE_PATH"
+    },
+
+    "salesforce": {
+        "dbtype": "SALESFORCE",
+        "username":"SL_USERNAME", 
+        "password": "SL_PASSWORD",
+        "security_token": "SL_TOKEN",
+        "version": "SL_VERSION"
+    },
+    "rd_beblue_bi": {
+        "dbtype": "REDSHIFT_TYPE",
+        "credentials": {
+            "username": "REDSHIFT_BI_USER",
+            "password": "REDSHIFT_BI_PASSWORD",
+            "hostname": "REDSHIFT_BI_HOST",
+            "port": "REDSHIFT_BI_PORT",
+            "dbname": "REDSHIFT_BI_DBNAME"
+        }
+    }
+}
