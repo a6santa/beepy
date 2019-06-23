@@ -24,8 +24,8 @@ RUN apt-get update && \
 	autoconf \
 	gettext
 
-COPY . /beblue-bi-etls
-WORKDIR /beblue-bi-etls
+COPY . /beepy
+WORKDIR /beepy
 
 RUN rm -rf /var/lib/apt/lists/*
 
