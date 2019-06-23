@@ -29,7 +29,7 @@ class GSpreadSheet(object):
     def __repr__(self):
         return self.__str__()
 
-    def get_spreadsheet(self, id_spreadsheet=None, name_worksheet=None):
+    def get_spreadsheet_to_pandas(self, id_spreadsheet=None, name_worksheet=None):
         """
             id_spreadsheet: id da planilha do google
                 EX:.
@@ -37,3 +37,13 @@ class GSpreadSheet(object):
             name_worksheet: nome da pasta de trabalho da planilha selecionada
         """
         return pd.DataFrame(self.conn.open_by_key(id_spreadsheet).worksheet(name_worksheet).get_all_records())
+
+if __name__ == '__main__':
+    import os
+    import etl.util.reader_json as rj
+    name_conn = 'google'
+    auth = os.environ.get(rj.reader_json(path='src/etl/config/auth_conn.json')[name_conn]['file_path'])
+    G = GSpreadSheet(auth)
+    df = G.get_spreadsheet_to_pandas('1J8jA-atpyIpH47gEMUmlGdcrxj6dIsUGRtLbeVSlKOE', 'sales')
+    print(df.head(50))
+    print(df.dtypes)
