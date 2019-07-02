@@ -53,8 +53,14 @@ class GSpreadSheet(object):
 if __name__ == '__main__':
     import os
     import etl.util.reader_json as rj
+    
     name_conn = 'google'
     auth = os.environ.get(rj.reader_json(path='src/etl/config/auth_conn.json')[name_conn]['file_path'])
-    G = GSpreadSheet(auth)
-    df = G.get_spreadsheet('1J8jA-atpyIpH47gEMUmlGdcrxj6dIsUGRtLbeVSlKOE', 'sales')
+    
+    G = GSpreadSheet(
+        auth,
+        key='1J8jA-atpyIpH47gEMUmlGdcrxj6dIsUGRtLbeVSlKOE'
+        )
+
+    df= G.get_worksheet_to_pandas('sales')
     print(df)
