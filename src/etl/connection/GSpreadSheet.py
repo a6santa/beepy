@@ -3,24 +3,26 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 
 class GSpreadSheet(object):
-    """
-        classe para inserção e busca de dados nas planilhas do Google
-        Atenção é nescessario a as chaves em arquivo json para a conexão
-
-        Parâmetros
-        
-        scope_list : lista com serviços do google para se conectar
-            ex: ['https://spreadsheets.google.com/feeds']
-        
-        file_auth = arquivo json de autenticacao na api Google  
-    """
-    def __init__(self, file_auth):
+    def __init__(self,file_auth,url=None,name=None,key=None,new=False):
         self.file_auth = file_auth
-        self.scope = ['https://spreadsheets.google.com/feeds']
-        
+        self.scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         self.creds = ServiceAccountCredentials.from_json_keyfile_name(self.file_auth, self.scope)
-
         self.conn = gspread.authorize(self.creds)
+        
+        if not new:
+            if url is not None:
+                self.spreadsheet = self.conn.open_by_url(url)
+            elif name is not None:
+                self.spreadsheet = self.conn.open(name)
+            elif key is not None:
+                self.spreadsheet = self.conn.open_by_key(key)
+            else:
+                raise Exception('Not Found spreadsheet')
+        else:
+            if name is None:
+                name='new_spread_sheet'
+            _spreadsheet = self.conn.create(name)
+            self.spreadsheet = self.conn.open(name)
 
 
     def __str__(self):
@@ -28,24 +30,25 @@ class GSpreadSheet(object):
 
     def __repr__(self):
         return self.__str__()
+        
 
-    def get_spreadsheet_to_pandas(self, id_spreadsheet=None, name_worksheet=None):
-        """
-            id_spreadsheet: id da planilha do google
-                EX:.
-                    '1Scm62YFz8s6DL2INsaW6otiPxlYQI_9imxFANvQwYLc'
-            name_worksheet: nome da pasta de trabalho da planilha selecionada
-        """
-        return pd.DataFrame(self.conn.open_by_key(id_spreadsheet).worksheet(name_worksheet).get_all_records())
+    def get_worksheet_to_pandas(self, name_worksheet):
+        return pd.DataFrame(self.spreadsheet.worksheet(name_worksheet).get_all_records())
 
-    def get_spreadsheet(self, id_spreadsheet=None, name_worksheet=None):
-        """
-            id_spreadsheet: id da planilha do google
-                EX:.
-                    '1Scm62YFz8s6DL2INsaW6otiPxlYQI_9imxFANvQwYLc'
-            name_worksheet: nome da pasta de trabalho da planilha selecionada
-        """
-        return self.conn.open_by_key(id_spreadsheet).worksheet(name_worksheet).get_all_records()
+    def get_worksheet(self, name_worksheet):
+        return self.spreadsheet.worksheet(name_worksheet).get_all_records()
+    
+    def create_worksheet(self, name_worksheet):
+        pass
+    
+    def del_worksheet(self, name_worksheet):
+        pass
+    
+    def full_load(self, name_worksheet, data,name_cols=None, truncate=False, version=False):
+        pass
+    
+    def insert(self, name_worksheet,tupla):
+        pass
 
 if __name__ == '__main__':
     import os
